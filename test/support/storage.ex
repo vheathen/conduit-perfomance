@@ -12,12 +12,13 @@ defmodule Conduit.Storage do
   end
 
   defp reset_eventstore! do
-    {:ok, conn} =
+    config =
       Conduit.EventStore.config()
       |> EventStore.Config.default_postgrex_opts()
-      |> Postgrex.start_link()
 
-    EventStore.Storage.Initializer.reset!(conn)
+    {:ok, conn} = Postgrex.start_link(config)
+
+    EventStore.Storage.Initializer.reset!(conn, config)
   end
 
   defp reset_readstore! do
@@ -30,6 +31,7 @@ defmodule Conduit.Storage do
     """
     TRUNCATE TABLE
       accounts_users,
+      accounts_user_names,
       blog_articles,
       blog_authors,
       blog_comments,

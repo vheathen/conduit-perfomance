@@ -7,12 +7,18 @@ defmodule Conduit.Blog.Aggregates.Author do
             followed_by_authors: MapSet.new()
 
   alias Conduit.Blog.Aggregates.Author
-  alias Conduit.Blog.Commands.{CreateAuthor, FollowAuthor, UnfollowAuthor}
-  alias Conduit.Blog.Events.{AuthorCreated, AuthorFollowed, AuthorUnfollowed}
+  alias Conduit.Blog.Commands.{CreateAuthor, ChangeAuthorUsername, FollowAuthor, UnfollowAuthor}
 
-  @doc """
-  Creates an author
-  """
+  alias Conduit.Blog.Events.{
+    AuthorCreated,
+    AuthorUsernameChanged,
+    AuthorFollowed,
+    AuthorUnfollowed
+  }
+
+  # @doc """
+  # Creates an author
+  # """
   def execute(%Author{uuid: nil}, %CreateAuthor{} = create) do
     %AuthorCreated{
       author_uuid: create.author_uuid,
@@ -21,9 +27,29 @@ defmodule Conduit.Blog.Aggregates.Author do
     }
   end
 
-  @doc """
-  Follow an author
-  """
+  def execute(%Author{}, %CreateAuthor{}) do
+    {:error, :already_created}
+  end
+
+  # any other commands should reach existing aggregates only
+  def execute(%Author{uuid: nil}, _any_command) do
+    {:error, :unknown_author}
+  end
+
+  def execute(%Author{username: same_username}, %ChangeAuthorUsername{username: same_username}) do
+    :ok
+  end
+
+  def execute(%Author{uuid: author_uuid}, %ChangeAuthorUsername{username: new_username}) do
+    %AuthorUsernameChanged{
+      author_uuid: author_uuid,
+      username: new_username
+    }
+  end
+
+  # @doc """
+  # Follow an author
+  # """
   def execute(%Author{uuid: author_uuid} = author, %FollowAuthor{follower_uuid: follower_uuid}) do
     case is_follower?(author, follower_uuid) do
       true ->
@@ -37,9 +63,9 @@ defmodule Conduit.Blog.Aggregates.Author do
     end
   end
 
-  @doc """
-  Unfollow an author
-  """
+  # @doc """
+  # Unfollow an author
+  # """
   def execute(%Author{uuid: author_uuid} = author, %UnfollowAuthor{unfollower_uuid: follower_uuid}) do
     case is_follower?(author, follower_uuid) do
       true ->
@@ -53,6 +79,12 @@ defmodule Conduit.Blog.Aggregates.Author do
     end
   end
 
+  # def execute(author, command) do
+  #   require Logger
+  #   Logger.error(inspect(author), label: "Author")
+  #   Logger.error(inspect(command), label: "Command")
+  # end
+
   # state mutators
 
   def apply(%Author{} = author, %AuthorCreated{} = created) do
@@ -62,6 +94,10 @@ defmodule Conduit.Blog.Aggregates.Author do
         user_uuid: created.user_uuid,
         username: created.username
     }
+  end
+
+  def apply(%Author{} = author, %AuthorUsernameChanged{username: new_username}) do
+    %Author{author | username: new_username}
   end
 
   def apply(%Author{followed_by_authors: followers} = author, %AuthorFollowed{

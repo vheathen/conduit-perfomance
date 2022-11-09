@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For production, we often load configuration from external
 # sources, such as your system environment. For this reason,
@@ -15,11 +15,13 @@ use Mix.Config
 # which you typically run after static files are built.
 config :conduit, ConduitWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  # url: [host: "example.com", port: 80],
+  url: [port: 80]
+
+# cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :warn
 
 # ## SSL Support
 #
@@ -61,10 +63,9 @@ config :logger, level: :info
 
 # Configures the event store database
 config :conduit, Conduit.EventStore,
-  serializer: Commanded.Serialization.JsonSerializer,
   username: "postgres",
   password: "postgres",
-  database: "conduit_eventstore_prod",
+  database: "conduit_eventstore_dev",
   hostname: "localhost",
   pool_size: 10
 
@@ -73,10 +74,10 @@ config :conduit, Conduit.Repo,
   migration_timestamps: [type: :utc_datetime_usec],
   username: "postgres",
   password: "postgres",
-  database: "conduit_readstore_prod",
+  database: "conduit_readstore_dev",
   hostname: "localhost",
   pool_size: 15
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"

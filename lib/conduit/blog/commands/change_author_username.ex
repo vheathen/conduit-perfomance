@@ -1,16 +1,13 @@
-defmodule Conduit.Blog.Commands.CreateAuthor do
+defmodule Conduit.Blog.Commands.ChangeAuthorUsername do
   defstruct author_uuid: "",
-            user_uuid: "",
             username: ""
 
   use ExConstructor
   use Vex.Struct
 
-  alias Conduit.Blog.Commands.CreateAuthor
+  alias Conduit.Blog.Commands.ChangeAuthorUsername
 
   validates(:author_uuid, uuid: true)
-
-  validates(:user_uuid, uuid: true)
 
   validates(:username,
     presence: [message: "can't be empty"],
@@ -21,7 +18,7 @@ defmodule Conduit.Blog.Commands.CreateAuthor do
   @doc """
   Assign a unique identity
   """
-  def assign_uuid(%CreateAuthor{} = create_author, uuid) do
-    %CreateAuthor{create_author | author_uuid: uuid}
+  def assign_uuid(%ChangeAuthorUsername{} = set_author_username, uuid) do
+    %ChangeAuthorUsername{set_author_username | author_uuid: uuid}
   end
 end

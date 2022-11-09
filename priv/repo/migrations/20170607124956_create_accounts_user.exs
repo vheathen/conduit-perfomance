@@ -13,5 +13,8 @@ defmodule Conduit.Repo.Migrations.CreateConduit.Accounts.User do
 
     create unique_index(:accounts_users, [:username])
     create unique_index(:accounts_users, [:email])
+
+    create index(:accounts_users, :inserted_at)
+    create index(:accounts_users, :updated_at)
   end
 end

@@ -11,7 +11,7 @@ defmodule ConduitWeb.Router do
       module: Conduit.Auth.Guardian
     )
 
-    plug(Guardian.Plug.VerifyHeader, realm: "Token")
+    plug(Guardian.Plug.VerifyHeader, scheme: "Token")
     plug(Guardian.Plug.LoadResource, allow_blank: true)
   end
 

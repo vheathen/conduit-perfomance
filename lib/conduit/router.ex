@@ -12,6 +12,7 @@ defmodule Conduit.Router do
 
   alias Conduit.Blog.Commands.{
     CreateAuthor,
+    ChangeAuthorUsername,
     CommentOnArticle,
     DeleteComment,
     FavoriteArticle,
@@ -43,6 +44,7 @@ defmodule Conduit.Router do
   dispatch(
     [
       CreateAuthor,
+      ChangeAuthorUsername,
       FollowAuthor,
       UnfollowAuthor
     ],

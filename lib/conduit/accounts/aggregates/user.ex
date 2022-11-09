@@ -20,9 +20,9 @@ defmodule Conduit.Accounts.Aggregates.User do
     UserRegistered
   }
 
-  @doc """
-  Register a new user
-  """
+  # @doc """
+  # Register a new user
+  # """
   def execute(%User{uuid: nil}, %RegisterUser{} = register) do
     %UserRegistered{
       user_uuid: register.user_uuid,
@@ -32,9 +32,9 @@ defmodule Conduit.Accounts.Aggregates.User do
     }
   end
 
-  @doc """
-  Update a user's username, email, and password
-  """
+  # @doc """
+  # Update a user's username, email, and password
+  # """
   def execute(%User{} = user, %UpdateUser{} = update) do
     Enum.reduce([&username_changed/2, &email_changed/2, &password_changed/2], [], fn change,
                                                                                      events ->

@@ -10,23 +10,20 @@ defmodule Conduit.Accounts.Commands.UpdateUser do
 
   alias Conduit.Accounts.Commands.UpdateUser
   alias Conduit.Accounts.Projections.User
-  alias Conduit.Accounts.Validators.{UniqueEmail, UniqueUsername}
+  # alias Conduit.Accounts.Validators.{UniqueEmail, UniqueUsername}
   alias Conduit.Auth
 
   validates(:user_uuid, uuid: true)
 
   validates(:username,
     presence: [message: "can't be empty"],
-    format: [with: ~r/^[a-z0-9]+$/, allow_nil: true, allow_blank: true, message: "is invalid"],
-    string: true,
-    by: &UniqueUsername.validate/2
+    format: [with: ~r/^[a-z0-9\-]+$/, allow_nil: true, allow_blank: true, message: "is invalid"],
+    string: true
   )
 
   validates(:email,
-    presence: [message: "can't be empty"],
     format: [with: ~r/\S+@\S+\.\S+/, allow_nil: true, allow_blank: true, message: "is invalid"],
-    string: true,
-    by: &UniqueEmail.validate/2
+    string: true
   )
 
   validates(:hashed_password, string: [allow_nil: true, allow_blank: true])
@@ -62,11 +59,11 @@ defmodule Conduit.Accounts.Commands.UpdateUser do
   end
 end
 
-defimpl Conduit.Support.Middleware.Uniqueness.UniqueFields,
-  for: Conduit.Accounts.Commands.UpdateUser do
-  def unique(%Conduit.Accounts.Commands.UpdateUser{user_uuid: user_uuid}),
-    do: [
-      {:email, "has already been taken", user_uuid},
-      {:username, "has already been taken", user_uuid}
-    ]
-end
+# defimpl Conduit.Support.Middleware.Uniqueness.UniqueFields,
+#   for: Conduit.Accounts.Commands.UpdateUser do
+#   def unique(%Conduit.Accounts.Commands.UpdateUser{user_uuid: user_uuid}),
+#     do: [
+#       {:email, "has already been taken", user_uuid},
+#       {:username, "has already been taken", user_uuid}
+#     ]
+# end

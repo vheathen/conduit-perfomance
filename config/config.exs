@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # General application configuration
 config :conduit,
@@ -12,6 +12,11 @@ config :conduit, Conduit.App,
   ],
   pub_sub: :local,
   registry: :local
+
+config :conduit, Conduit.EventStore,
+  column_data_type: "jsonb",
+  serializer: EventStore.JsonbSerializer,
+  types: EventStore.PostgresTypes
 
 # Configures the endpoint
 config :conduit, ConduitWeb.Endpoint,

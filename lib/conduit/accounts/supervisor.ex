@@ -10,7 +10,8 @@ defmodule Conduit.Accounts.Supervisor do
   def init(_arg) do
     Supervisor.init(
       [
-        Accounts.Projectors.User
+        Accounts.Projectors.User,
+        Accounts.Projectors.Username
       ],
       strategy: :one_for_one
     )

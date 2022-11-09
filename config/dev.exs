@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -38,7 +38,6 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configures the event store database
 config :conduit, Conduit.EventStore,
-  serializer: Commanded.Serialization.JsonSerializer,
   username: "postgres",
   password: "postgres",
   database: "conduit_eventstore_dev",

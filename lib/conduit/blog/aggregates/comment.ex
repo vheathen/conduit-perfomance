@@ -19,9 +19,9 @@ defmodule Conduit.Blog.Aggregates.Comment do
     CommentDeleted
   }
 
-  @doc """
-  Comment on an article
-  """
+  # @doc """
+  # Comment on an article
+  # """
   def execute(%Comment{uuid: nil}, %CommentOnArticle{} = comment) do
     %ArticleCommented{
       comment_uuid: comment.comment_uuid,
@@ -31,9 +31,9 @@ defmodule Conduit.Blog.Aggregates.Comment do
     }
   end
 
-  @doc """
-  Delete a comment made by the user
-  """
+  # @doc """
+  # Delete a comment made by the user
+  # """
   def execute(
         %Comment{
           uuid: comment_uuid,

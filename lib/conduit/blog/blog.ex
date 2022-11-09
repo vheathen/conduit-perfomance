@@ -11,6 +11,7 @@ defmodule Conduit.Blog do
     FollowAuthor,
     CommentOnArticle,
     CreateAuthor,
+    ChangeAuthorUsername,
     DeleteComment,
     FavoriteArticle,
     PublishArticle,
@@ -121,8 +122,10 @@ defmodule Conduit.Blog do
       |> CreateAuthor.new()
       |> CreateAuthor.assign_uuid(uuid)
 
-    with :ok <- App.dispatch(create_author, consistency: :strong) do
-      get(Author, uuid)
+    # , consistency: :strong) do
+    with :ok <- App.dispatch(create_author) do
+      # get(Author, uuid)
+      {:ok, :ok}
     else
       reply -> reply
     end
@@ -135,14 +138,27 @@ defmodule Conduit.Blog do
     {:ok, author}
   end
 
+  def change_author_username(%{user_uuid: user_uuid} = attrs) do
+    change_author_username =
+      attrs
+      |> ChangeAuthorUsername.new()
+      |> ChangeAuthorUsername.assign_uuid(user_uuid)
+
+    with :ok <- App.dispatch(change_author_username) do
+      {:ok, :ok}
+    else
+      reply -> reply
+    end
+  end
+
   @doc """
   Follow an author
   """
   def follow_author(%Author{uuid: author_uuid} = author, %Author{uuid: follower_uuid}) do
     with :ok <-
            App.dispatch(
-             FollowAuthor.new(author_uuid: author_uuid, follower_uuid: follower_uuid),
-             consistency: :strong
+             FollowAuthor.new(author_uuid: author_uuid, follower_uuid: follower_uuid)
+             #  consistency: :strong
            ) do
       {:ok, %Author{author | following: true}}
     else
@@ -156,8 +172,8 @@ defmodule Conduit.Blog do
   def unfollow_author(%Author{uuid: author_uuid} = author, %Author{uuid: unfollower_uuid}) do
     with :ok <-
            App.dispatch(
-             UnfollowAuthor.new(author_uuid: author_uuid, unfollower_uuid: unfollower_uuid),
-             consistency: :strong
+             UnfollowAuthor.new(author_uuid: author_uuid, unfollower_uuid: unfollower_uuid)
+             #  consistency: :strong
            ) do
       {:ok, %Author{author | following: false}}
     else

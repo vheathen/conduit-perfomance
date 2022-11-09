@@ -23,9 +23,9 @@ defmodule Conduit.Blog.Aggregates.Article do
     ArticleUnfavorited
   }
 
-  @doc """
-  Publish an article
-  """
+  # @doc """
+  # Publish an article
+  # """
   def execute(%Article{uuid: nil}, %PublishArticle{} = publish) do
     %ArticlePublished{
       article_uuid: publish.article_uuid,
@@ -38,9 +38,9 @@ defmodule Conduit.Blog.Aggregates.Article do
     }
   end
 
-  @doc """
-  Favorite the article for an author
-  """
+  # @doc """
+  # Favorite the article for an author
+  # """
   def execute(%Article{uuid: nil}, %FavoriteArticle{}), do: {:error, :article_not_found}
 
   def execute(
@@ -60,9 +60,9 @@ defmodule Conduit.Blog.Aggregates.Article do
     end
   end
 
-  @doc """
-  Unfavorite the article for the user
-  """
+  # @doc """
+  # Unfavorite the article for the user
+  # """
   def execute(%Article{uuid: nil}, %UnfavoriteArticle{}), do: {:error, :article_not_found}
 
   def execute(

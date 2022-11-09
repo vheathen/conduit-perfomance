@@ -23,15 +23,16 @@ defmodule Conduit.Accounts do
       |> RegisterUser.downcase_email()
       |> RegisterUser.hash_password()
 
-    with :ok <- App.dispatch(register_user, consistency: :strong) do
-      get(User, uuid)
+    # , consistency: :strong) do
+    with :ok <- App.dispatch(register_user) do
+      {:ok, uuid}
     end
   end
 
   @doc """
   Update the email, username, and/or password of a user.
   """
-  def update_user(%User{uuid: user_uuid} = user, attrs \\ %{}) do
+  def update_user(%User{uuid: _user_uuid} = user, attrs \\ %{}) do
     update_user =
       attrs
       |> UpdateUser.new()
@@ -40,8 +41,10 @@ defmodule Conduit.Accounts do
       |> UpdateUser.downcase_email()
       |> UpdateUser.hash_password()
 
-    with :ok <- App.dispatch(update_user, consistency: :strong) do
-      get(User, user_uuid)
+    # , consistency: :strong) do
+    with :ok <- App.dispatch(update_user) do
+      # get(User, user_uuid)
+      :ok
     end
   end
 
@@ -72,10 +75,10 @@ defmodule Conduit.Accounts do
     Repo.get(User, uuid)
   end
 
-  defp get(schema, uuid) do
-    case Repo.get(schema, uuid) do
-      nil -> {:error, :not_found}
-      projection -> {:ok, projection}
-    end
-  end
+  # defp get(schema, uuid) do
+  #   case Repo.get(schema, uuid) do
+  #     nil -> {:error, :not_found}
+  #     projection -> {:ok, projection}
+  #   end
+  # end
 end

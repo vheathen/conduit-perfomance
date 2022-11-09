@@ -1,8 +1,9 @@
 defmodule Conduit.Blog.Workflows.CreateAuthorFromUser do
   use Commanded.Event.Handler,
     application: Conduit.App,
-    name: "Blog.Workflows.CreateAuthorFromUser",
-    consistency: :strong
+    name: "Blog.Workflows.CreateAuthorFromUser"
+
+  # consistency: :strong
 
   alias Conduit.Accounts.Events.UserRegistered
   alias Conduit.Blog

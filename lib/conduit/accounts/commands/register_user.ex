@@ -10,13 +10,13 @@ defmodule Conduit.Accounts.Commands.RegisterUser do
 
   alias Conduit.Accounts.Commands.RegisterUser
   alias Conduit.Accounts.Validators.{UniqueEmail, UniqueUsername}
-  alias Conduit.Auth
+  # alias Conduit.Auth
 
   validates(:user_uuid, uuid: true)
 
   validates(:username,
     presence: [message: "can't be empty"],
-    format: [with: ~r/^[a-z0-9]+$/, allow_nil: true, allow_blank: true, message: "is invalid"],
+    format: [with: ~r/^[a-z0-9\-]+$/, allow_nil: true, allow_blank: true, message: "is invalid"],
     string: true,
     by: &UniqueUsername.validate/2
   )
@@ -54,8 +54,9 @@ defmodule Conduit.Accounts.Commands.RegisterUser do
   @doc """
   Hash the password, clear the original password
   """
-  def hash_password(%RegisterUser{password: password} = register_user) do
-    %RegisterUser{register_user | password: nil, hashed_password: Auth.hash_password(password)}
+  def hash_password(%RegisterUser{password: _password} = register_user) do
+    # %RegisterUser{register_user | password: nil, hashed_password: Auth.hash_password(password)}
+    %RegisterUser{register_user | password: nil, hashed_password: "123"}
   end
 end
 

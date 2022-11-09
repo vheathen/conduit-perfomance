@@ -4,8 +4,6 @@ defmodule Conduit.Auth do
   Uses the bcrypt password hashing function.
   """
 
-  alias Comeonin.Bcrypt
-
   alias Conduit.Accounts
   alias Conduit.Accounts.Projections.User
 
@@ -15,8 +13,10 @@ defmodule Conduit.Auth do
     end
   end
 
-  def hash_password(password), do: Bcrypt.hashpwsalt(password)
-  def validate_password(password, hash), do: Bcrypt.checkpw(password, hash)
+  # def hash_password(password), do: Bcrypt.hash_pwd_salt(password)
+  def hash_password(password), do: password
+  # Bcrypt.verify_pass(password, hash)
+  def validate_password(password, hash), do: password == hash
 
   defp user_by_email(email) do
     case Accounts.user_by_email(email) do

@@ -1,8 +1,9 @@
 defmodule Conduit.Accounts.Projectors.User do
   use Commanded.Projections.Ecto,
     application: Conduit.App,
-    name: "Accounts.Projectors.User",
-    consistency: :strong
+    name: "Accounts.Projectors.User"
+
+  # consistency: :strong
 
   alias Conduit.Accounts.Events.{
     UserEmailChanged,
@@ -38,6 +39,7 @@ defmodule Conduit.Accounts.Projectors.User do
   )
 
   defp update_user(multi, user_uuid, changes) do
+    changes = Keyword.put(changes, :updated_at, DateTime.utc_now())
     Ecto.Multi.update_all(multi, :user, user_query(user_uuid), set: changes)
   end
 
